@@ -159,7 +159,7 @@ function SparklineMini({ data, stroke = "var(--muted)" }: { data: number[]; stro
   return (
     <div className="sparkline-wrap" style={{ width: SPARKLINE_WIDTH, height: SPARKLINE_HEIGHT }}>
       {mounted ? (
-        <LineChart width={SPARKLINE_WIDTH} height={SPARKLINE_HEIGHT} data={chartData} margin={0}>
+        <LineChart width={SPARKLINE_WIDTH} height={SPARKLINE_HEIGHT} data={chartData} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
           <Line type="monotone" dataKey="v" stroke={stroke} strokeWidth={1.5} dot={false} isAnimationActive />
         </LineChart>
       ) : null}
