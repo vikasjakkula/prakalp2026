@@ -24,7 +24,7 @@ import {
   Zap,
   AlertTriangle,
 } from "lucide-react";
-import { ESP32_WS_URL, AI_PREDICT_URL, CHART_HISTORY_LENGTH } from "@/lib/config";
+import { getAiPredictUrl, getEsp32WsUrl, CHART_HISTORY_LENGTH } from "@/lib/config";
 import type { SensorData, AIPrediction } from "@/lib/types";
 import { getAQICategory } from "@/lib/types";
 
@@ -87,7 +87,6 @@ export default function Dashboard() {
   const [history, setHistory] = useState<SensorData[]>([]);
   const [aiConnected, setAiConnected] = useState(false);
   const [aiPrediction, setAIPrediction] = useState<AIPrediction | null>(null);
-  const [aiError, setAiError] = useState<string | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const aiIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -99,22 +98,29 @@ export default function Dashboard() {
   const displayAi = aiPrediction ?? MOCK_AI;
 
   const fetchAI = useCallback(async () => {
+    const url = getAiPredictUrl();
+    if (!url) {
+      setAIPrediction(null);
+      setAiConnected(false);
+      return;
+    }
     try {
-      const res = await fetch(AI_PREDICT_URL);
+      const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json: AIPrediction = await res.json();
       setAIPrediction(json);
-      setAiError(null);
       setAiConnected(true);
     } catch (e) {
-      setAiError(e instanceof Error ? e.message : "AI service unavailable");
       setAIPrediction(null);
       setAiConnected(false);
     }
   }, []);
 
   useEffect(() => {
-    const ws = new WebSocket(ESP32_WS_URL);
+    const wsUrl = getEsp32WsUrl();
+    if (!wsUrl) return;
+
+    const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
 
     ws.onmessage = (event) => {
