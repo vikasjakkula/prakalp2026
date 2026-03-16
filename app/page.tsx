@@ -148,16 +148,21 @@ function SemicircleGauge({
   );
 }
 
-/** Sparkline for last 10 readings, 80x30, no axes */
+/** Sparkline for last 10 readings, 80x30, no axes. Client-only to avoid Recharts hydration mismatch (clipPathId). */
+const SPARKLINE_WIDTH = 80;
+const SPARKLINE_HEIGHT = 30;
+
 function SparklineMini({ data, stroke = "var(--muted)" }: { data: number[]; stroke?: string }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const chartData = data.length ? data.map((v, i) => ({ i, v })) : [{ i: 0, v: 0 }];
   return (
-    <div className="sparkline-wrap">
-      <ResponsiveContainer width={80} height={30}>
-        <LineChart data={chartData} margin={0}>
+    <div className="sparkline-wrap" style={{ width: SPARKLINE_WIDTH, height: SPARKLINE_HEIGHT }}>
+      {mounted ? (
+        <LineChart width={SPARKLINE_WIDTH} height={SPARKLINE_HEIGHT} data={chartData} margin={0}>
           <Line type="monotone" dataKey="v" stroke={stroke} strokeWidth={1.5} dot={false} isAnimationActive />
         </LineChart>
-      </ResponsiveContainer>
+      ) : null}
     </div>
   );
 }
