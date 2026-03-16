@@ -816,10 +816,6 @@ export default function Dashboard() {
           AI
         </button>
       </nav>
-
-      {isFullscreen && (
-        <p className="fullscreen-esc-hint">Press ESC to exit fullscreen</p>
-      )}
     </main>
   );
 }
