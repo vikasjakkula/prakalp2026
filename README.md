@@ -1,41 +1,63 @@
-# **PROBLEM STATEMENT: AI Smart Environmental Monitoring & Prediction Station**
+# AI Smart Environmental Station
 
-A solution is needed to monitor environmental factors in real-time using sensors and provide AI-based predictions to aid decision-making in agriculture and environmental science.
-
----
-
-## **Summary**
-
-Build a dashboard that receives live data from environmental sensors and uses AI to predict key outcomes (e.g., rain probability, irrigation need). Everything runs locally—no cloud or API keys required.
+Monitor environment with sensors (ESP32), view real-time data on a local dashboard, and get AI-based predictions (rain chance, irrigation advice)—all running locally. No API keys or cloud needed.
 
 ---
 
-## **How To Solve**
+## Quick Start
 
-- **1. Set Up Sensors**  
-  Deploy your ESP32 (or compatible device) to collect environmental data such as temperature, humidity, soil moisture, and air quality.
+**1. Set up:**
+- ESP32 (or similar) collects data: temp, humidity, soil, air quality.
+- Dashboard (Next.js) shows data & AI panel.
+- Local Python (Flask) gives rain/irrigation advice.
 
-- **2. Run the Dashboard**  
-  Use a local dashboard to visualize real-time sensor data and display AI predictions.
-
-- **3. Local AI Predictor**  
-  Set up a simple AI model locally (for example, with Flask + Python) to analyze incoming data and offer actionable insights such as irrigation advice or weather alerts.
-
----
-
-## **What You Need**
-
-- A device (like ESP32) broadcasting sensor data locally via WebSocket.
-- A dashboard application running in your browser.
-- An AI prediction service running locally.
+**2. Requirements:**
+- ESP32 sending sensor data via WebSocket.
+- Browser dashboard.
+- Flask AI predictor.
 
 ---
 
-## **Summary of Displayed Data**
+## Key Features
 
-- **Soil:** Moisture percent, pH, NPK, pump status
-- **Atmosphere:** Temperature, humidity, pressure, wind
-- **Air Quality:** AQI, CO₂, VOCs, light
-- **AI Panel:** Rain chance, irrigation advice, UV & alerts
+- **Live soil/air readings:** moisture, pH, NPK, AQI, light, UV, and more.
+- **AI advice panel:** rain% (next 6h), irrigation need, weather alerts.
+- **All-in-one grid:** 16+ live values.
+- **Charts:** last 60 temperature/humidity samples.
+- **WebSocket:** for instant ESP32 → dashboard updates.
+- **AI polling:** dashboard fetches `http://localhost:5000/predict` every 30s.
+
+---
+
+## How to Run
+
+1. **AI Predictor:**
+   ```bash
+   cd ai-predictor
+   pip install -r requirements.txt
+   python3 app.py
+   ```
+   Or from root:  
+   `npm run ai`
+
+2. **Test in browser:**
+   - [http://localhost:5000](http://localhost:5000) → AI prediction JSON
+   - `/predict` & `/health` also available
+
+3. **Dashboard config:**
+   Set `NEXT_PUBLIC_AI_PREDICT_URL=http://localhost:5000/predict` in `.env.local`.
+
+---
+
+## Stack
+
+| Layer      | Tech                   | Notes                               |
+|------------|------------------------|-------------------------------------|
+| Sensors    | ESP32 / Arduino        | Sends data via WebSocket            |
+| Dashboard  | Next.js + Recharts     | UI, charts, AI info                 |
+| AI         | Python Flask (port 5000) | Local rain/irrigation prediction    |
+| Auth (opt) | Supabase               | Login/register if enabled           |
+
+_No API keys needed for local use; Supabase keys only if using auth._
 
 ---
