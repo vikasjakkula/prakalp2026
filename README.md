@@ -144,7 +144,7 @@
 - **Output:** Rain probability (0-100%), Irrigation decision (YES/NO)
 - **Training Data:** 6 months of Hyderabad local weather
 - **Model Accuracy:** ~87% on test set
-- **Deployment:** Flask REST API (localhost:5000)
+- **Deployment:** Flask REST API (https://prakalp-backend-wyx7.onrender.com/)
 - **Integration:** Next.js dashboard fetches new predictions every 30 seconds
 
 ---
@@ -176,7 +176,7 @@ cd prakalp2026-ai-station
 npm install
 
 # 2. Setup .env.local
-echo "NEXT_PUBLIC_AI_PREDICT_URL=http://localhost:5000/predict" >> .env.local
+echo "NEXT_PUBLIC_AI_PREDICT_URL=https://prakalp-backend-wyx7.onrender.com/" >> .env.local
 
 # 3. Start Flask AI backend
 cd ai-predictor

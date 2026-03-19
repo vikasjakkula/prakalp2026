@@ -72,13 +72,16 @@ export function getEsp32WsUrl(): string | null {
   return raw;
 }
 
+/** Default production backend (Render). Override with NEXT_PUBLIC_AI_PREDICT_URL. */
+const DEFAULT_AI_PREDICT_URL = "https://prakalp-backend-wyx7.onrender.com/";
+
 /**
- * AI prediction URL (set in env).
+ * AI prediction URL (set in env, or defaults to Render backend).
  * We do NOT default to localhost in production because browsers cannot reach the
  * Vercel server's localhost, and it triggers CORS noise for end users.
  */
 export function getAiPredictUrl(): string | null {
-  const raw = readPublicEnv("NEXT_PUBLIC_AI_PREDICT_URL");
+  const raw = readPublicEnv("NEXT_PUBLIC_AI_PREDICT_URL") ?? DEFAULT_AI_PREDICT_URL;
   if (!raw) return null;
 
   if (typeof window !== "undefined") {
